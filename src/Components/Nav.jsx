@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { userDataContext } from "../Context/UserContext";
 import { authDataContext } from "../Context/AuthContext";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, User, Settings, Menu, X } from "lucide-react";
 import { TbBriefcase } from "react-icons/tb";
 import { TbBell } from "react-icons/tb";
 import axios from "axios";
@@ -13,6 +13,8 @@ function Nav() {
   const { serverUrl } = useContext(authDataContext);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -32,7 +34,7 @@ function Nav() {
   useEffect(() => {
     if (userData) {
       fetchNotifications();
-      const interval = setInterval(fetchNotifications, 15000); // har 15 sec refresh
+      const interval = setInterval(fetchNotifications, 15000);
       return () => clearInterval(interval);
     }
   }, [userData]);
@@ -49,8 +51,7 @@ function Nav() {
 
   const handleBellClick = async () => {
     setShowNotifDropdown(!showNotifDropdown);
-    
-    // Dropdown khulte hi "read" mark karo
+
     if (!showNotifDropdown && unreadCount > 0) {
       try {
         await axios.put(`${serverUrl}/api/notifications/mark-read`, {}, { withCredentials: true });
@@ -91,7 +92,6 @@ function Nav() {
     }
   };
 
-  // Role ke hisaab se links
   const links = userData?.role === "client"
     ? [
         { label: "Dashboard", path: "/client/dashboard" },
@@ -108,20 +108,21 @@ function Nav() {
     : [];
 
   return (
-    <header className="border-b border-slate-800 bg-[#0f111a] px-6 py-4">
+    <header className="border-b border-slate-800 bg-[#0f111a] px-4 sm:px-6 py-4 relative">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
 
         {/* Logo */}
         <div
-          className="flex items-center gap-2 text-violet-400 font-bold text-2xl tracking-wide cursor-pointer"
+          className="flex items-center gap-2 text-violet-400 font-bold text-xl sm:text-2xl tracking-wide cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <span className="text-3xl">🗲</span>
-          FreelancerHub
+          <span className="text-2xl sm:text-3xl">🗲</span>
+          <span className="hidden sm:inline">FreelancerHub</span>
+          <span className="sm:hidden">FH</span>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="flex items-center gap-8 text-sm font-medium text-slate-400">
+        {/* Desktop Links - hidden on mobile/tablet */}
+        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-400">
           {links.map((link) => (
             <button
               key={link.path}
@@ -137,106 +138,164 @@ function Nav() {
           ))}
         </nav>
 
-        {userData && (
-          <div className="relative" ref={notifRef}>
-            <div 
-              className="relative cursor-pointer"
-              onClick={handleBellClick}
-            >
-              <TbBell className="text-gray-400 text-[22px] hover:text-gray-200 transition-colors" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-medium w-[18px] h-[18px] rounded-full flex items-center justify-center">
-                  {unreadCount > 9 ? "9+" : unreadCount}
-                </span>
-              )}
-            </div>
+        {/* Right side group */}
+        <div className="flex items-center gap-3 sm:gap-4">
 
-            {showNotifDropdown && (
-              <div className="absolute right-0 mt-3 w-80 bg-[#131520] border border-slate-800 rounded-xl shadow-2xl py-2 z-50 max-h-[400px] overflow-y-auto">
-                <div className="px-4 py-2 border-b border-slate-800/60">
-                  <p className="text-sm font-semibold text-white">Notifications</p>
-                </div>
-
-                {notifications.length === 0 ? (
-                  <p className="text-gray-500 text-sm text-center py-6">Koi notification nahi hai</p>
-                ) : (
-                  notifications.map((notif) => (
-                    <div
-                      key={notif._id}
-                      onClick={() => handleNotifClick(notif.link)}
-                      className={`px-4 py-3 border-b border-slate-800/40 cursor-pointer hover:bg-slate-800/40 transition-colors ${
-                        !notif.read ? "bg-[#534ab715]" : ""
-                      }`}
-                    >
-                      <p className="text-[13px] text-gray-200">{notif.text}</p>
-                      <p className="text-[11px] text-gray-500 mt-1">
-                        {new Date(notif.createdAt).toLocaleString()}
-                      </p>
-                    </div>
-                  ))
+          {/* Notification Bell */}
+          {userData && (
+            <div className="relative" ref={notifRef}>
+              <div
+                className="relative cursor-pointer"
+                onClick={handleBellClick}
+              >
+                <TbBell className="text-gray-400 text-[20px] sm:text-[22px] hover:text-gray-200 transition-colors" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-medium w-[18px] h-[18px] rounded-full flex items-center justify-center">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
                 )}
               </div>
-            )}
-          </div>
-        )}
 
-        {/* Profile Dropdown */}
-        {userData ? (
-          <div className="relative" ref={dropdownRef}>
+              {showNotifDropdown && (
+                <div className="absolute right-0 mt-3 w-72 sm:w-80 bg-[#131520] border border-slate-800 rounded-xl shadow-2xl py-2 z-50 max-h-[400px] overflow-y-auto">
+                  <div className="px-4 py-2 border-b border-slate-800/60">
+                    <p className="text-sm font-semibold text-white">Notifications</p>
+                  </div>
+
+                  {notifications.length === 0 ? (
+                    <p className="text-gray-500 text-sm text-center py-6">Koi notification nahi hai</p>
+                  ) : (
+                    notifications.map((notif) => (
+                      <div
+                        key={notif._id}
+                        onClick={() => handleNotifClick(notif.link)}
+                        className={`px-4 py-3 border-b border-slate-800/40 cursor-pointer hover:bg-slate-800/40 transition-colors ${
+                          !notif.read ? "bg-[#534ab715]" : ""
+                        }`}
+                      >
+                        <p className="text-[13px] text-gray-200">{notif.text}</p>
+                        <p className="text-[11px] text-gray-500 mt-1">
+                          {new Date(notif.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Profile Dropdown - desktop only */}
+          {userData ? (
+            <div className="relative hidden sm:block" ref={dropdownRef}>
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-2 p-1 rounded-full hover:bg-slate-800 transition-all focus:outline-none border border-transparent hover:border-slate-700"
+              >
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm shadow-md">
+                  {userData.name.charAt(0).toUpperCase()}
+                </div>
+              </button>
+
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-3 w-64 bg-[#131520] border border-slate-800 rounded-xl shadow-2xl py-2 z-50">
+                  <div className="px-4 py-3 border-b border-slate-800/60 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-indigo-950 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-base">
+                      {userData.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-semibold text-white truncate">{userData.name}</span>
+                      <span className="text-xs text-slate-500 truncate">{userData.email}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-1.5 space-y-0.5">
+                    <button
+                      onClick={() => navigate("/profile")}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 rounded-lg transition-colors text-left"
+                    >
+                      <User size={14} /> My Profile
+                    </button>
+                    <button className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 rounded-lg transition-colors text-left">
+                      <Settings size={14} /> Settings
+                    </button>
+                  </div>
+
+                  <div className="p-1.5 border-t border-slate-800/60 mt-1.5">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors text-left"
+                    >
+                      <LogOut size={14} /> Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
             <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2 p-1 rounded-full hover:bg-slate-800 transition-all focus:outline-none border border-transparent hover:border-slate-700"
+              onClick={() => navigate("/auth/login")}
+              className="hidden sm:block bg-[#534AB7] hover:bg-[#4840a0] text-gray-100 text-sm font-medium px-5 py-2 rounded-md transition-colors"
             >
-              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                {userData.name.charAt(0).toUpperCase()}
-              </div>
+              Login
             </button>
+          )}
 
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-3 w-64 bg-[#131520] border border-slate-800 rounded-xl shadow-2xl py-2 animate-in fade-in slide-in-from-top-3 duration-200 z-50">
-                <div className="px-4 py-3 border-b border-slate-800/60 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-950 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-base">
-                    {userData.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-sm font-semibold text-white truncate">{userData.name}</span>
-                    <span className="text-xs text-slate-500 truncate">{userData.email}</span>
-                  </div>
-                </div>
-
-                <div className="p-1.5 space-y-0.5">
-                  <button 
-                    onClick={() => navigate("/profile")}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 rounded-lg transition-colors text-left"
-                  >
-                    <User size={14} /> My Profile
-                  </button>
-                  <button className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 rounded-lg transition-colors text-left">
-                    <Settings size={14} /> Settings
-                  </button>
-                </div>
-
-                <div className="p-1.5 border-t border-slate-800/60 mt-1.5">
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors text-left"
-                  >
-                    <LogOut size={14} /> Logout
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        ) : (
+          {/* Hamburger - mobile/tablet only */}
           <button
-            onClick={() => navigate("/auth/login")}
-            className="bg-[#534AB7] hover:bg-[#4840a0] text-gray-100 text-sm font-medium px-5 py-2 rounded-md transition-colors"
+            className="lg:hidden text-slate-300"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            Login
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-        )}
-
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden mt-4 pb-2 flex flex-col gap-1 border-t border-slate-800 pt-3 max-w-7xl mx-auto">
+          {links.map((link) => (
+            <button
+              key={link.path}
+              onClick={() => {
+                navigate(link.path);
+                setIsMobileMenuOpen(false);
+              }}
+              className={`text-left px-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                location.pathname === link.path
+                  ? "text-violet-400 bg-violet-500/10"
+                  : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+              }`}
+            >
+              {link.label}
+            </button>
+          ))}
+
+          {userData ? (
+            <>
+              <button
+                onClick={() => { navigate("/profile"); setIsMobileMenuOpen(false); }}
+                className="text-left px-2 py-2.5 rounded-md text-sm font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 flex items-center gap-2"
+              >
+                <User size={16} /> My Profile
+              </button>
+              <button
+                onClick={handleLogout}
+                className="text-left px-2 py-2.5 rounded-md text-sm font-medium text-rose-400 hover:bg-rose-500/10 flex items-center gap-2"
+              >
+                <LogOut size={16} /> Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => { navigate("/auth/login"); setIsMobileMenuOpen(false); }}
+              className="text-left px-2 py-2.5 rounded-md text-sm font-medium bg-[#534AB7] text-white"
+            >
+              Login
+            </button>
+          )}
+        </div>
+      )}
     </header>
   );
 }
