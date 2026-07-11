@@ -3,12 +3,15 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { authDataContext } from "../Context/AuthContext";
 import { userDataContext } from "../Context/UserContext";
+import { useNavigate } from "react-router-dom";
+import { TbEye } from "react-icons/tb";
 import Nav from "../Components/Nav";
 import { TbUser, TbMail, TbNotes, TbCode, TbX, TbDeviceFloppy } from "react-icons/tb";
 
 function Profile() {
   const { serverUrl } = useContext(authDataContext);
   const { userData, setUserData } = useContext(userDataContext);
+  const navigate = useNavigate();
 
   const [name, setName] = useState(userData?.name || "");
   const [bio, setBio] = useState(userData?.bio || "");
@@ -72,6 +75,16 @@ function Profile() {
             </span>
           </div>
         </div>
+
+        {/* 🔴 NEW: sirf freelancer ke liye — apni public profile dekhne ka button */}
+        {userData?.role === "freelancer" && (
+          <button
+            onClick={() => navigate(`/freelancer/${userData._id}/profile`)}
+            className="flex items-center gap-2 bg-[#ffffff08] border border-gray-700 hover:border-[#534AB7] text-gray-300 text-[13px] font-medium px-4 py-2 rounded-md mb-6 transition-colors"
+          >
+            <TbEye /> Meri Public Profile Dekho (jaisa client ko dikhti hai)
+          </button>
+        )}
 
         <form onSubmit={handleSave} className="flex flex-col gap-4">
 

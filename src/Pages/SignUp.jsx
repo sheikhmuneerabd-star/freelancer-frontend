@@ -13,6 +13,7 @@ import axios from 'axios'
 import { authDataContext } from "../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { userDataContext } from "../Context/UserContext";
+import toast from "react-hot-toast";
 
 function SignUp() {
     const [showPassword, setShowPassword] = useState(false);

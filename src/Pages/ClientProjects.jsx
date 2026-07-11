@@ -5,12 +5,16 @@ import { authDataContext } from "../Context/AuthContext";
 import Nav from "../Components/Nav";
 import { TbPlus, TbX } from "react-icons/tb";
 import toast from "react-hot-toast";
+import ReviewModal from "../Components/ReviewModal";
+import { useNavigate } from "react-router-dom";
 
 function ClientProjects() {
   const { serverUrl } = useContext(authDataContext);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [reviewProject, setReviewProject] = useState(null);
+  const navigate = useNavigate();
 
   // Task modal
   const [taskModal, setTaskModal] = useState(null); // project object
@@ -72,10 +76,13 @@ function ClientProjects() {
     return styles[status] || styles.open;
   };
 
-  const handleCompleteProject = async (projectId) => {
+  // 🔴 FIX: ab poora 'project' object pass karenge, sirf id nahi —
+  // taake completion ke baad usi project ke liye review modal khul sake
+  const handleCompleteProject = async (project) => {
     try {
-      await axios.put(`${serverUrl}/api/client/${projectId}/complete`, {}, { withCredentials: true });
+      await axios.put(`${serverUrl}/api/client/${project._id}/complete`, {}, { withCredentials: true });
       toast.success("Project complete ho gaya! 🎉");
+      setReviewProject(project);   // 🔴 FIX: ab 'project' defined hai
       fetchProjects(); // refresh
     } catch (error) {
       toast.error("Kuch ghalat ho gaya");
@@ -124,9 +131,19 @@ function ClientProjects() {
                     </span>
                   </div>
                   <p className="text-[12px] text-gray-500">
-                    {project.assignedFreelancer 
-                      ? `Hired: ${project.assignedFreelancer.name}` 
-                      : "Abhi koi hire nahi"} • Deadline: {project.deadline} din
+                    {project.assignedFreelancer ? (
+                      <>
+                        Hired:{" "}
+                        <span
+                          onClick={() => navigate(`/freelancer/${project.assignedFreelancer._id}/profile`)}
+                          className="text-[#a5b4fc] hover:underline cursor-pointer"
+                        >
+                          {project.assignedFreelancer.name}
+                        </span>
+                      </>
+                    ) : (
+                      "Abhi koi hire nahi"
+                    )} • Deadline: {project.deadline} din
                   </p>
                 </div>
 
@@ -145,10 +162,20 @@ function ClientProjects() {
 
                       {project.status === "in-progress" && (
                         <button
-                          onClick={() => handleCompleteProject(project._id)}
+                          onClick={() => handleCompleteProject(project)}
                           className="bg-green-600/20 border border-green-600 text-green-400 text-[12px] font-medium px-3.5 py-1.5 rounded-md hover:bg-green-600/30"
                         >
                           Mark Completed
+                        </button>
+                      )}
+
+                      {/* 🔴 NEW: agar project complete ho chuka hai aur review abhi tak nahi di, to button dikhao */}
+                      {project.status === "completed" && (
+                        <button
+                          onClick={() => setReviewProject(project)}
+                          className="bg-amber-600/20 border border-amber-600 text-amber-400 text-[12px] font-medium px-3.5 py-1.5 rounded-md hover:bg-amber-600/30"
+                        >
+                          Review Do
                         </button>
                       )}
                     </>
@@ -201,6 +228,15 @@ function ClientProjects() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 🔴 FIX: Review Modal ab actually render ho raha hai */}
+      {reviewProject && (
+        <ReviewModal
+          project={reviewProject}
+          onClose={() => setReviewProject(null)}
+          onSuccess={() => fetchProjects()}
+        />
       )}
     </div>
   );

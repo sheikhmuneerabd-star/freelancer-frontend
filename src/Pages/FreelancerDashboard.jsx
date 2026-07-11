@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef, useCallback } from "react";
 import axios from "axios";
 import { authDataContext } from "../Context/AuthContext";
 import { userDataContext } from "../Context/UserContext";
+import { socketDataContext } from "../Context/SocketContext";
 import { TbCurrencyDollar, TbBriefcase, TbChecklist, TbSend } from "react-icons/tb";
 import Nav from "../Components/Nav";
 import toast from "react-hot-toast";
@@ -9,37 +10,82 @@ import toast from "react-hot-toast";
 function FreelancerDashboard() {
   const { serverUrl } = useContext(authDataContext);
   const { userData } = useContext(userDataContext);
+  const { socket } = useContext(socketDataContext);
 
   const [stats, setStats] = useState({ earnings: 0, activeCount: 0, pendingTasksCount: 0, proposalsCount: 0 });
   const [activeProjects, setActiveProjects] = useState([]);
   const [myProposals, setMyProposals] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [tasks, setTasks] = useState([]);
 
-  const fetchDashboard = async () => {
+  const debounceRef = useRef(null);
+
+  const fetchDashboard = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const res = await axios.get(`${serverUrl}/api/freelancer/freelancerDashboard`, { withCredentials: true });
       setStats(res.data.stats);
       setActiveProjects(res.data.activeProjects);
       setMyProposals(res.data.myProposals);
       setTasks(res.data.tasks);
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
       setLoading(false);
     }
   };
+
+  const debouncedRefresh = useCallback(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      fetchDashboard(false);
+    }, 300);
+  }, [serverUrl]);
 
   useEffect(() => {
     fetchDashboard();
   }, []);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleDashboardRefresh = (payload) => {
+      debouncedRefresh();
+
+      const messages = {
+        project_completed: `"${payload.projectTitle}" complete ho gaya! Earnings update ho gayi 💰`,
+        review_received: "Aapko nayi review mili! ⭐",
+        proposal_accepted: "Aapka proposal accept ho gaya! 🎉",
+        proposal_rejected: "Ek proposal reject hua",
+        task_added: "Naya task assign hua",
+      };
+      if (messages[payload.reason]) {
+        toast.success(messages[payload.reason]);
+      }
+    };
+
+    const handleNewTask = (newTask) => {
+      setTasks((prev) => {
+        if (prev.some((t) => t._id === newTask._id)) return prev;
+        return [...prev, newTask];
+      });
+    };
+
+    socket.on("dashboard:refresh", handleDashboardRefresh);
+    socket.on("task:new", handleNewTask);
+
+    return () => {
+      socket.off("dashboard:refresh", handleDashboardRefresh);
+      socket.off("task:new", handleNewTask);
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [socket, debouncedRefresh]);
+
   const handleCompleteTask = async (taskId) => {
     try {
       await axios.put(`${serverUrl}/api/tasks/${taskId}/complete`, {}, { withCredentials: true });
       toast.success("Task complete mark ho gaya!");
-      fetchDashboard(); // refresh
+      fetchDashboard();
     } catch (error) {
       toast.error("Kuch ghalat ho gaya");
     }
@@ -63,7 +109,6 @@ function FreelancerDashboard() {
           <p className="text-gray-500 text-sm">Loading...</p>
         ) : (
           <>
-            {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
               <div className="bg-[#ffffff08] border border-gray-700 rounded-lg p-4">
                 <p className="text-[12px] text-gray-500 mb-1 flex items-center gap-1"><TbCurrencyDollar /> Earnings</p>
@@ -83,7 +128,6 @@ function FreelancerDashboard() {
               </div>
             </div>
 
-            {/* Active Projects */}
             <p className="text-[16px] font-medium text-gray-50 mb-3">Active Projects</p>
             <div className="flex flex-col gap-2.5 mb-8">
               {activeProjects.length === 0 ? (
@@ -103,7 +147,6 @@ function FreelancerDashboard() {
               )}
             </div>
 
-            {/* My Proposals */}
             <p className="text-[16px] font-medium text-gray-50 mb-3">My Proposals</p>
             <div className="flex flex-col gap-2.5">
               {myProposals.length === 0 ? (
@@ -129,7 +172,6 @@ function FreelancerDashboard() {
               )}
             </div>
 
-            {/* My Tasks */}
             <p className="text-[16px] font-medium text-gray-50 mb-3 mt-8">My Tasks</p>
             <div className="flex flex-col gap-2.5">
               {tasks.length === 0 ? (

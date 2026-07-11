@@ -3,11 +3,15 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { authDataContext } from "../Context/AuthContext";
 import { TbCurrencyDollar, TbClock, TbUsers, TbX } from "react-icons/tb";
+import { socketDataContext } from "../Context/SocketContext";
 import Nav from "../Components/Nav";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function ProjectList() {
   const { serverUrl } = useContext(authDataContext);
+  const navigate = useNavigate();
+  const { socket } = useContext(socketDataContext);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,13 +54,24 @@ function ProjectList() {
     return () => clearTimeout(delay);
   }, [search, minBudget, maxBudget, sort]);
 
+  // ✅ ye naya add karo — socket listener
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchProjects(false);  // false = loading spinner mat dikhao
-    }, 10000);
+    if (!socket) return;
 
-    return () => clearInterval(interval);
-  }, [search, minBudget, maxBudget, sort]);
+    const handleNewProject = (newProject) => {
+      setProjects((prev) => {
+        if (prev.some((p) => p._id === newProject._id)) return prev; // duplicate na ho
+        return [newProject, ...prev];
+      });
+      toast.success(`Naya project post hua: "${newProject.title}"`);
+    };
+
+    socket.on("project:new", handleNewProject);
+
+    return () => {
+      socket.off("project:new", handleNewProject);
+    };
+  }, [socket]);
 
   const handleSendProposal = async (e) => {
     e.preventDefault();
@@ -84,7 +99,7 @@ function ProjectList() {
 
   return (
     <div className="bg-[#0a0a0f] min-h-screen pb-8">
-
+      
       <Nav />
 
       <div className="max-w-7xl mx-auto px-6 pt-10">
@@ -144,7 +159,16 @@ function ProjectList() {
                       </span>
                     </div>
                     <p className="text-[12px] text-gray-500">
-                      Client: {project.clientId?.name}
+                      Client:{" "}
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();   // parent card ka click event trigger na ho
+                          navigate(`/client/${project.clientId?._id}/profile`);
+                        }}
+                        className="text-[#a5b4fc] hover:underline cursor-pointer"
+                      >
+                        {project.clientId?.name}
+                      </span>
                     </p>
                   </div>
                   <p className="text-[16px] font-medium text-[#a5b4fc] whitespace-nowrap ml-3">

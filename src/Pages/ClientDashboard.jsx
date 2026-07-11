@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useContext } from 'react'
+import { socketDataContext } from "../Context/SocketContext";
 import { useState } from 'react'
 import { userDataContext } from '../Context/UserContext';
 import Nav from '../Components/Nav';
@@ -16,6 +17,28 @@ function ClientDashboard() {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const { socket } = useContext(socketDataContext);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewProposal = (newProposal) => {
+      setProposals((prev) => [newProposal, ...prev]);
+      setStats((prev) =>
+        prev.map((s) =>
+          s.label === "Pending Proposals" ? { ...s, count: s.count + 1 } : s
+        )
+      );
+      toast.success(`${newProposal.freelancerId?.name} ne naya proposal bheja!`);
+    };
+
+    socket.on("proposal:new", handleNewProposal);
+
+    return () => {
+      socket.off("proposal:new", handleNewProposal);
+    };
+  }, [socket]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -71,6 +94,7 @@ function ClientDashboard() {
       toast.success("Freelancer hire ho gaya!");
       fetchClDashboard();
     } catch (error) {
+      console.log(error)
       toast.error("Kuch ghalat ho gaya");
     }
   }
@@ -178,12 +202,17 @@ function ClientDashboard() {
                 ) : (
                   proposals.map((proposal) => (
                     <div key={proposal._id} className="bg-[#131520] border border-slate-800/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                      <div 
+                        className="flex items-center gap-3 sm:gap-4 min-w-0 cursor-pointer group"
+                        onClick={() => navigate(`/freelancer/${proposal.freelancerId?._id}/profile`)}
+                      >
                         <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-indigo-950/50 border border-indigo-500/30 flex items-center justify-center text-indigo-300 font-semibold text-sm tracking-wide shadow-inner flex-shrink-0">
                           {proposal.freelancerId?.name?.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
-                          <h4 className="text-sm font-medium text-slate-200 truncate">{proposal.freelancerId?.name}</h4>
+                          <h4 className="text-sm font-medium text-slate-200 truncate group-hover:text-[#a5b4fc] transition-colors">
+                            {proposal.freelancerId?.name}
+                          </h4>
                           <p className="text-xs text-slate-500 mt-0.5 truncate">
                             applied for <span className="text-slate-400">"{proposal.projectId?.title}"</span>
                           </p>

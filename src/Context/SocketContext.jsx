@@ -14,7 +14,13 @@ function SocketProvider({ children }) {
   useEffect(() => {
     if (userData) {
       const newSocket = io(serverUrl);
-      newSocket.emit("register", userData._id);
+
+      // 🔴 ab userId ke sath role bhi bhej rahe hain
+      newSocket.emit("register", {
+        userId: userData._id,
+        role: userData.role, // "client" ya "freelancer"
+      });
+
       setSocket(newSocket);
 
       return () => newSocket.disconnect();
@@ -28,4 +34,4 @@ function SocketProvider({ children }) {
   );
 }
 
-export default SocketProvider
+export default SocketProvider;

@@ -13,6 +13,8 @@ import FreelancerDashboard from './Pages/FreelancerDashboard';
 import Chat from './Pages/Chat';
 import ProtectedRoute from './Context/ProtectedRoute';
 import Profile from './Pages/Profile';
+import FreelancerProfile from "./Pages/FreelancerProfile";
+import ClientProfile from "./Pages/ClientProfile";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -61,10 +63,23 @@ function App() {
             </ProtectedRoute>
         } />
 
+        <Route path="/client/:clientId/profile" element={
+          <ProtectedRoute>
+            <ClientProfile />
+          </ProtectedRoute>
+        } />
+
         <Route path='/profile' element={
             <ProtectedRoute>
                 <Profile />
             </ProtectedRoute>
+        } />
+
+        {/* 🔴 NEW: Freelancer public profile — koi bhi logged-in user (client ya freelancer) dekh sake */}
+        <Route path="/freelancer/:freelancerId/profile" element={
+          <ProtectedRoute>
+            <FreelancerProfile />
+          </ProtectedRoute>
         } />
 
         <Route path="/freelancer/dashboard" element={
