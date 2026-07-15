@@ -6,15 +6,18 @@ import AuthContext from './Context/AuthContext.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import UserContext from './Context/UserContext.jsx'
 import SocketProvider from './Context/SocketContext.jsx'
+import ThemeProvider from './Context/ThemeContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <AuthContext>
-        <UserContext>
-          <SocketProvider>
-              <App />
-          </SocketProvider>
-        </UserContext>
-    </AuthContext>
+    <ThemeProvider>
+      <AuthContext>
+          <UserContext>
+            <SocketProvider>
+                <App />
+            </SocketProvider>
+          </UserContext>
+      </AuthContext>
+    </ThemeProvider>
   </BrowserRouter>,
 )

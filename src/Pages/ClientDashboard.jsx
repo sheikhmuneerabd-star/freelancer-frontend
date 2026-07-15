@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { useContext } from 'react'
-import { socketDataContext } from "../Context/SocketContext";
 import { useState } from 'react'
 import { userDataContext } from '../Context/UserContext';
 import Nav from '../Components/Nav';
@@ -17,28 +16,6 @@ function ClientDashboard() {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-
-  const { socket } = useContext(socketDataContext);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleNewProposal = (newProposal) => {
-      setProposals((prev) => [newProposal, ...prev]);
-      setStats((prev) =>
-        prev.map((s) =>
-          s.label === "Pending Proposals" ? { ...s, count: s.count + 1 } : s
-        )
-      );
-      toast.success(`${newProposal.freelancerId?.name} ne naya proposal bheja!`);
-    };
-
-    socket.on("proposal:new", handleNewProposal);
-
-    return () => {
-      socket.off("proposal:new", handleNewProposal);
-    };
-  }, [socket]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -94,7 +71,6 @@ function ClientDashboard() {
       toast.success("Freelancer hire ho gaya!");
       fetchClDashboard();
     } catch (error) {
-      console.log(error)
       toast.error("Kuch ghalat ho gaya");
     }
   }
@@ -110,48 +86,44 @@ function ClientDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0d0e15] text-slate-200 font-sans antialiased">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0d0e15] text-gray-800 dark:text-slate-200 font-sans antialiased transition-colors">
 
       <Nav />
 
-      {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 sm:space-y-10">
 
-        {/* Welcome Section */}
         <div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <h1 className="text-xl sm:text-3xl font-semibold text-white tracking-tight break-words">
+            <h1 className="text-xl sm:text-3xl font-semibold text-gray-900 dark:text-white tracking-tight break-words">
               Welcome back, {userData.name}
             </h1>
-            <span className="bg-[#534ab730] border border-[#534AB7] text-[#a5b4fc] text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap">
+            <span className="bg-[#534ab715] dark:bg-[#534ab730] border border-[#534AB7] text-[#534AB7] dark:text-[#a5b4fc] text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap">
               Client
             </span>
           </div>
-          <p className="text-slate-500 text-sm mt-1">Aapke projects ka overview</p>
+          <p className="text-gray-500 text-sm mt-1">Aapke projects ka overview</p>
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <p className="text-slate-500 text-sm">Loading dashboard...</p>
+            <p className="text-gray-500 text-sm">Loading dashboard...</p>
           </div>
         ) : (
           <>
-            {/* Stats Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {stats.map((stat, index) => (
-                <div key={index} className="bg-[#131520] border border-slate-800/80 rounded-xl p-4 sm:p-5 hover:border-slate-700 transition-all">
-                  <span className="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wider block mb-2">
+                <div key={index} className="bg-white dark:bg-[#131520] border border-gray-200 dark:border-slate-800/80 rounded-xl p-4 sm:p-5 hover:border-gray-300 dark:hover:border-slate-700 transition-all shadow-sm dark:shadow-none">
+                  <span className="text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider block mb-2">
                     {stat.label}
                   </span>
-                  <span className="text-2xl sm:text-3xl font-bold text-slate-100">{stat.count}</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100">{stat.count}</span>
                 </div>
               ))}
             </div>
 
-            {/* Active Projects Section */}
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <h2 className="text-lg sm:text-xl font-semibold text-white">Aapke Active Projects</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Aapke Active Projects</h2>
                 <button
                   className="bg-indigo-600/90 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
                   onClick={() => navigate("/client/post-project")}
@@ -162,28 +134,28 @@ function ClientDashboard() {
 
               <div className="space-y-3">
                 {activeProjects.length === 0 ? (
-                  <p className="text-slate-500 text-sm">Koi active project nahi hai abhi</p>
+                  <p className="text-gray-500 text-sm">Koi active project nahi hai abhi</p>
                 ) : (
                   activeProjects.map((project) => (
-                    <div key={project._id} className="bg-[#131520] border border-slate-800/60 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:bg-[#161926] transition-colors">
+                    <div key={project._id} className="bg-white dark:bg-[#131520] border border-gray-200 dark:border-slate-800/60 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:bg-gray-50 dark:hover:bg-[#161926] transition-colors shadow-sm dark:shadow-none">
                       <div className="space-y-1.5 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                          <h3 className="text-sm sm:text-base font-medium text-slate-100 break-words">{project.title}</h3>
+                          <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-slate-100 break-words">{project.title}</h3>
                           <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border whitespace-nowrap ${
                             project.status === "open" 
-                              ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
+                              ? "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20"
                               : project.status === "in-progress"
-                              ? "text-green-400 bg-green-500/10 border-green-500/20"
-                              : "text-blue-400 bg-blue-500/10 border-blue-500/20"
+                              ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/20"
+                              : "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20"
                           }`}>
                             {project.status}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-gray-500">
                           Deadline: {project.deadline} din
                         </p>
                       </div>
-                      <div className="text-base sm:text-lg font-semibold text-indigo-400 self-start sm:self-center whitespace-nowrap">
+                      <div className="text-base sm:text-lg font-semibold text-indigo-600 dark:text-indigo-400 self-start sm:self-center whitespace-nowrap">
                         ${project.budgetMin} - ${project.budgetMax}
                       </div>
                     </div>
@@ -192,33 +164,38 @@ function ClientDashboard() {
               </div>
             </div>
 
-            {/* Recent Proposals Section */}
             <div className="space-y-4">
-              <h2 className="text-lg sm:text-xl font-semibold text-white">Recent Proposals</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Recent Proposals</h2>
 
               <div className="space-y-3">
                 {proposals.length === 0 ? (
-                  <p className="text-slate-500 text-sm">Abhi koi proposal nahi aaya</p>
+                  <p className="text-gray-500 text-sm">Abhi koi proposal nahi aaya</p>
                 ) : (
                   proposals.map((proposal) => (
-                    <div key={proposal._id} className="bg-[#131520] border border-slate-800/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                    <div key={proposal._id} className="bg-white dark:bg-[#131520] border border-gray-200 dark:border-slate-800/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shadow-sm dark:shadow-none">
                       <div 
                         className="flex items-center gap-3 sm:gap-4 min-w-0 cursor-pointer group"
                         onClick={() => navigate(`/freelancer/${proposal.freelancerId?._id}/profile`)}
                       >
-                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-indigo-950/50 border border-indigo-500/30 flex items-center justify-center text-indigo-300 font-semibold text-sm tracking-wide shadow-inner flex-shrink-0">
+                        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-center text-indigo-500 dark:text-indigo-300 font-semibold text-sm tracking-wide shadow-inner flex-shrink-0">
                           {proposal.freelancerId?.name?.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
-                          <h4 className="text-sm font-medium text-slate-200 truncate group-hover:text-[#a5b4fc] transition-colors">
+                          <h4 className="text-sm font-medium text-gray-800 dark:text-slate-200 truncate group-hover:text-[#534AB7] dark:group-hover:text-[#a5b4fc] transition-colors">
                             {proposal.freelancerId?.name}
                           </h4>
-                          <p className="text-xs text-slate-500 mt-0.5 truncate">
-                            applied for <span className="text-slate-400">"{proposal.projectId?.title}"</span>
+                          <p className="text-xs text-gray-500 mt-0.5 truncate">
+                            applied for <span className="text-gray-600 dark:text-slate-400">"{proposal.projectId?.title}"</span>
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 self-end sm:self-center">
+                      <div className="flex items-center gap-2 self-end sm:self-center flex-wrap">
+                        <button
+                          onClick={() => navigate(`/client/chat?with=${proposal.freelancerId?._id}`)}
+                          className="border border-gray-300 dark:border-slate-700 hover:border-[#534AB7] hover:bg-[#534ab708] dark:hover:bg-[#534ab715] text-gray-600 dark:text-slate-300 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5"
+                        >
+                          <MessageSquare size={13} /> Chat
+                        </button>
                         <button
                           onClick={() => handleAccept(proposal._id)}
                           className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded-lg text-xs font-medium transition-colors flex-1 sm:flex-none"
@@ -227,7 +204,7 @@ function ClientDashboard() {
                         </button>
                         <button
                           onClick={() => handleReject(proposal._id)}
-                          className="border border-slate-700 hover:bg-slate-800 text-slate-400 hover:text-slate-200 px-4 py-1.5 rounded-lg text-xs font-medium transition-all flex-1 sm:flex-none"
+                          className="border border-gray-300 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200 px-4 py-1.5 rounded-lg text-xs font-medium transition-all flex-1 sm:flex-none"
                         >
                           Reject
                         </button>

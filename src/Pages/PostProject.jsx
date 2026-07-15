@@ -62,16 +62,14 @@ function PostProject() {
   };
 
   return (
-    <div className="bg-[#0a0a0f] min-h-screen pb-8">
+    <div className="bg-gray-50 dark:bg-[#0a0a0f] min-h-screen pb-8 transition-colors">
 
-      {/* Navbar */}
       <Nav />
 
-      {/* Form */}
       <div className="max-w-[640px] mx-auto px-4 pt-8">
 
         <div className="mb-6">
-          <p className="text-[22px] font-medium text-gray-50">Naya project post karo</p>
+          <p className="text-[22px] font-medium text-gray-900 dark:text-gray-50">Naya project post karo</p>
           <p className="text-[13px] text-gray-500 mt-1">
             Apni requirements clearly likho — freelancers ko aasani hogi
           </p>
@@ -79,9 +77,8 @@ function PostProject() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-[18px]">
 
-          {/* Title */}
           <div>
-            <label className="flex items-center gap-1 text-[13px] font-medium text-gray-400 mb-1.5">
+            <label className="flex items-center gap-1 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
               <TbHeading /> Project title
             </label>
             <input
@@ -89,29 +86,27 @@ function PostProject() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. E-Commerce Website banana hai"
-              className="w-full bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
+              className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
               required
             />
           </div>
 
-          {/* Description */}
           <div>
-            <label className="flex items-center gap-1 text-[13px] font-medium text-gray-400 mb-1.5">
+            <label className="flex items-center gap-1 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
               <TbNotes /> Description
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="React aur Node.js se full e-commerce platform chahiye jisme login, products, cart aur payment ho..."
-              className="w-full min-h-[100px] bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors resize-none leading-relaxed"
+              className="w-full min-h-[100px] bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors resize-none leading-relaxed"
               required
             />
           </div>
 
-          {/* Budget */}
           <div className="flex gap-3.5">
             <div className="flex-1">
-              <label className="flex items-center gap-1 text-[13px] font-medium text-gray-400 mb-1.5">
+              <label className="flex items-center gap-1 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
                 <TbCurrencyDollar /> Budget (min)
               </label>
               <input
@@ -119,12 +114,12 @@ function PostProject() {
                 value={budgetMin}
                 onChange={(e) => setBudgetMin(e.target.value)}
                 placeholder="300"
-                className="w-full bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
+                className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
                 required
               />
             </div>
             <div className="flex-1">
-              <label className="flex items-center gap-1 text-[13px] font-medium text-gray-400 mb-1.5">
+              <label className="flex items-center gap-1 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
                 <TbCurrencyDollar /> Budget (max)
               </label>
               <input
@@ -132,15 +127,14 @@ function PostProject() {
                 value={budgetMax}
                 onChange={(e) => setBudgetMax(e.target.value)}
                 placeholder="500"
-                className="w-full bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
+                className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
                 required
               />
             </div>
           </div>
 
-          {/* Deadline */}
           <div>
-            <label className="flex items-center gap-1 text-[13px] font-medium text-gray-400 mb-1.5">
+            <label className="flex items-center gap-1 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
               <TbCalendar /> Deadline (days)
             </label>
             <input
@@ -148,14 +142,13 @@ function PostProject() {
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
               placeholder="30"
-              className="max-w-[200px] bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
+              className="max-w-[200px] bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
               required
             />
           </div>
 
-          {/* Skills */}
           <div>
-            <label className="flex items-center gap-1 text-[13px] font-medium text-gray-400 mb-1.5">
+            <label className="flex items-center gap-1 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
               <TbCode /> Skills required
             </label>
             <input
@@ -164,13 +157,13 @@ function PostProject() {
               onChange={(e) => setSkillInput(e.target.value)}
               onKeyDown={addSkill}
               placeholder="Type skill aur Enter dabao..."
-              className="w-full bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors mb-2.5"
+              className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors mb-2.5"
             />
             <div className="flex gap-2 flex-wrap">
               {skills.map((skill, index) => (
                 <span
                   key={index}
-                  className="flex items-center gap-1.5 bg-[#534ab725] border border-[#534ab760] text-[#a5b4fc] text-xs px-2.5 py-1 rounded-full"
+                  className="flex items-center gap-1.5 bg-[#534ab710] dark:bg-[#534ab725] border border-[#534ab760] text-[#534AB7] dark:text-[#a5b4fc] text-xs px-2.5 py-1 rounded-full"
                 >
                   {skill}
                   <TbX
@@ -183,11 +176,10 @@ function PostProject() {
           </div>
           {error && <span className="text-red-500 font-medium text-sm">*{error}</span>}
 
-          {/* Buttons */}
           <div className="flex gap-3 mt-2">
             <button
               type="button"
-              className="flex-1 py-3 bg-transparent border border-gray-600 rounded-md text-gray-400 text-sm font-medium hover:bg-[#ffffff08] transition-colors"
+              className="flex-1 py-3 bg-transparent border border-gray-300 dark:border-gray-600 rounded-md text-gray-600 dark:text-gray-400 text-sm font-medium hover:bg-gray-100 dark:hover:bg-[#ffffff08] transition-colors"
             >
               Cancel
             </button>

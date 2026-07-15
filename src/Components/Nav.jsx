@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { userDataContext } from "../Context/UserContext";
 import { authDataContext } from "../Context/AuthContext";
 import { socketDataContext } from "../Context/SocketContext";
+import { themeDataContext } from "../Context/ThemeContext";
 import { LogOut, User, Settings, Menu, X } from "lucide-react";
-import { TbBriefcase, TbBell, TbEye, TbTrash, TbCheck, TbInbox } from "react-icons/tb";
+import { TbBell, TbEye, TbTrash, TbCheck, TbInbox, TbSun, TbMoon } from "react-icons/tb";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -12,6 +13,7 @@ function Nav() {
   const { userData, setUserData } = useContext(userDataContext);
   const { serverUrl } = useContext(authDataContext);
   const { socket } = useContext(socketDataContext);
+  const { theme, toggleTheme } = useContext(themeDataContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -122,14 +124,14 @@ function Nav() {
 
   const notifIconStyle = (type) => {
     const styles = {
-      proposal: { bg: "bg-blue-500/15", text: "text-blue-400" },
-      accepted: { bg: "bg-green-500/15", text: "text-green-400" },
-      rejected: { bg: "bg-red-500/15", text: "text-red-400" },
-      message: { bg: "bg-violet-500/15", text: "text-violet-400" },
-      task: { bg: "bg-amber-500/15", text: "text-amber-400" },
-      review: { bg: "bg-yellow-500/15", text: "text-yellow-400" },
+      proposal: { bg: "bg-blue-500/15", text: "text-blue-500 dark:text-blue-400" },
+      accepted: { bg: "bg-green-500/15", text: "text-green-500 dark:text-green-400" },
+      rejected: { bg: "bg-red-500/15", text: "text-red-500 dark:text-red-400" },
+      message: { bg: "bg-violet-500/15", text: "text-violet-500 dark:text-violet-400" },
+      task: { bg: "bg-amber-500/15", text: "text-amber-500 dark:text-amber-400" },
+      review: { bg: "bg-yellow-500/15", text: "text-yellow-500 dark:text-yellow-400" },
     };
-    return styles[type] || { bg: "bg-slate-500/15", text: "text-slate-400" };
+    return styles[type] || { bg: "bg-slate-500/15", text: "text-slate-500 dark:text-slate-400" };
   };
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -172,12 +174,12 @@ function Nav() {
     : [];
 
   return (
-    <header className="border-b border-slate-800 bg-[#0f111a] px-4 sm:px-6 py-4 relative">
+    <header className="border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0f111a] px-4 sm:px-6 py-4 relative transition-colors">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
 
         {/* Logo */}
         <div
-          className="flex items-center gap-2 text-violet-400 font-bold text-xl sm:text-2xl tracking-wide cursor-pointer"
+          className="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold text-xl sm:text-2xl tracking-wide cursor-pointer"
           onClick={() => navigate("/")}
         >
           <span className="text-2xl sm:text-3xl">🗲</span>
@@ -186,15 +188,15 @@ function Nav() {
         </div>
 
         {/* Desktop Links */}
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-400">
+        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-slate-400">
           {links.map((link) => (
             <button
               key={link.path}
               onClick={() => navigate(link.path)}
               className={
                 location.pathname === link.path
-                  ? "text-violet-400 border-b-2 border-violet-500 pb-1"
-                  : "hover:text-slate-200 transition-colors"
+                  ? "text-violet-600 dark:text-violet-400 border-b-2 border-violet-500 pb-1"
+                  : "hover:text-gray-900 dark:hover:text-slate-200 transition-colors"
               }
             >
               {link.label}
@@ -205,6 +207,15 @@ function Nav() {
         {/* Right side group */}
         <div className="flex items-center gap-3 sm:gap-4">
 
+          {/* 🔴 NEW: Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+            title={theme === "dark" ? "Light mode" : "Dark mode"}
+          >
+            {theme === "dark" ? <TbSun size={20} /> : <TbMoon size={20} />}
+          </button>
+
           {/* Notification Bell */}
           {userData && (
             <div className="relative" ref={notifRef}>
@@ -212,7 +223,7 @@ function Nav() {
                 className="relative cursor-pointer"
                 onClick={handleBellClick}
               >
-                <TbBell className="text-gray-400 text-[20px] sm:text-[22px] hover:text-gray-200 transition-colors" />
+                <TbBell className="text-gray-500 dark:text-gray-400 text-[20px] sm:text-[22px] hover:text-gray-800 dark:hover:text-gray-200 transition-colors" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-medium w-[18px] h-[18px] rounded-full flex items-center justify-center">
                     {unreadCount > 9 ? "9+" : unreadCount}
@@ -221,11 +232,11 @@ function Nav() {
               </div>
 
               {showNotifDropdown && (
-                <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-[#131520] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-50">
+                <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white dark:bg-[#131520] border border-gray-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-50">
                   {/* Header */}
-                  <div className="px-4 py-3.5 border-b border-slate-800/60 flex items-center justify-between bg-[#161926]">
+                  <div className="px-4 py-3.5 border-b border-gray-100 dark:border-slate-800/60 flex items-center justify-between bg-gray-50 dark:bg-[#161926]">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-white">Notifications</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">Notifications</p>
                       {unreadCount > 0 && (
                         <span className="bg-[#534AB7] text-white text-[10px] font-medium px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
                           {unreadCount}
@@ -237,14 +248,14 @@ function Nav() {
                         {unreadCount > 0 && (
                           <button
                             onClick={handleMarkAllRead}
-                            className="text-[11px] text-[#a5b4fc] hover:text-white font-medium transition-colors"
+                            className="text-[11px] text-[#6c5fc7] dark:text-[#a5b4fc] hover:text-[#534AB7] dark:hover:text-white font-medium transition-colors"
                           >
                             Sab read karo
                           </button>
                         )}
                         <button
                           onClick={handleClearAll}
-                          className="text-[11px] text-red-400 hover:text-red-300 font-medium transition-colors"
+                          className="text-[11px] text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 font-medium transition-colors"
                         >
                           Clear all
                         </button>
@@ -255,7 +266,7 @@ function Nav() {
                   {/* List */}
                   {notifications.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 px-4">
-                      <TbInbox className="text-slate-700 text-4xl mb-2" />
+                      <TbInbox className="text-gray-300 dark:text-slate-700 text-4xl mb-2" />
                       <p className="text-gray-500 text-sm">Koi notification nahi hai</p>
                     </div>
                   ) : (
@@ -266,8 +277,8 @@ function Nav() {
                           <div
                             key={notif._id}
                             onClick={() => handleNotifClick(notif)}
-                            className={`group px-4 py-3 border-b border-slate-800/40 last:border-b-0 cursor-pointer hover:bg-slate-800/40 transition-colors flex items-start gap-3 ${
-                              !notif.read ? "bg-[#534ab712]" : ""
+                            className={`group px-4 py-3 border-b border-gray-100 dark:border-slate-800/40 last:border-b-0 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/40 transition-colors flex items-start gap-3 ${
+                              !notif.read ? "bg-[#534ab708] dark:bg-[#534ab712]" : ""
                             }`}
                           >
                             <div className={`w-8 h-8 rounded-full ${iconStyle.bg} ${iconStyle.text} flex items-center justify-center flex-shrink-0 mt-0.5 text-[13px] font-semibold uppercase`}>
@@ -275,10 +286,10 @@ function Nav() {
                             </div>
 
                             <div className="min-w-0 flex-1">
-                              <p className={`text-[13px] leading-snug ${!notif.read ? "text-gray-100 font-medium" : "text-gray-400"}`}>
+                              <p className={`text-[13px] leading-snug ${!notif.read ? "text-gray-900 dark:text-gray-100 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
                                 {notif.text}
                               </p>
-                              <p className="text-[11px] text-gray-600 mt-1">
+                              <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-1">
                                 {new Date(notif.createdAt).toLocaleString()}
                               </p>
                             </div>
@@ -288,7 +299,7 @@ function Nav() {
                                 <span className="w-2 h-2 rounded-full bg-[#534AB7] mt-1.5"></span>
                               )}
                               <TbTrash
-                                className="text-gray-600 hover:text-red-400 text-[14px] opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="text-gray-400 dark:text-gray-600 hover:text-red-500 dark:hover:text-red-400 text-[14px] opacity-0 group-hover:opacity-100 transition-opacity"
                                 onClick={(e) => handleDeleteNotif(e, notif._id)}
                               />
                             </div>
@@ -307,7 +318,7 @@ function Nav() {
             <div className="relative hidden sm:block" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 p-1 rounded-full hover:bg-slate-800 transition-all focus:outline-none border border-transparent hover:border-slate-700"
+                className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-all focus:outline-none border border-transparent hover:border-gray-200 dark:hover:border-slate-700"
               >
                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm shadow-md">
                   {userData.name.charAt(0).toUpperCase()}
@@ -315,21 +326,21 @@ function Nav() {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-3 w-64 bg-[#131520] border border-slate-800 rounded-xl shadow-2xl py-2 z-50">
-                  <div className="px-4 py-3 border-b border-slate-800/60 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-indigo-950 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-base">
+                <div className="absolute right-0 mt-3 w-64 bg-white dark:bg-[#131520] border border-gray-200 dark:border-slate-800 rounded-xl shadow-2xl py-2 z-50">
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-800/60 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950 border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-center text-indigo-500 dark:text-indigo-400 font-bold text-base">
                       {userData.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex flex-col min-w-0">
-                      <span className="text-sm font-semibold text-white truncate">{userData.name}</span>
-                      <span className="text-xs text-slate-500 truncate">{userData.email}</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userData.name}</span>
+                      <span className="text-xs text-gray-500 truncate">{userData.email}</span>
                     </div>
                   </div>
 
                   <div className="p-1.5 space-y-0.5">
                     <button
                       onClick={() => navigate("/profile")}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 rounded-lg transition-colors text-left"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800/50 rounded-lg transition-colors text-left"
                     >
                       <User size={14} /> My Profile
                     </button>
@@ -340,21 +351,21 @@ function Nav() {
                           navigate(`/freelancer/${userData._id}/profile`);
                           setIsDropdownOpen(false);
                         }}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 rounded-lg transition-colors text-left"
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800/50 rounded-lg transition-colors text-left"
                       >
                         <TbEye size={14} /> My Public Profile
                       </button>
                     )}
 
-                    <button className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 rounded-lg transition-colors text-left">
+                    <button className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800/50 rounded-lg transition-colors text-left">
                       <Settings size={14} /> Settings
                     </button>
                   </div>
 
-                  <div className="p-1.5 border-t border-slate-800/60 mt-1.5">
+                  <div className="p-1.5 border-t border-gray-100 dark:border-slate-800/60 mt-1.5">
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors text-left"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-rose-500 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors text-left"
                     >
                       <LogOut size={14} /> Logout
                     </button>
@@ -373,7 +384,7 @@ function Nav() {
 
           {/* Hamburger */}
           <button
-            className="lg:hidden text-slate-300"
+            className="lg:hidden text-gray-600 dark:text-slate-300"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -383,7 +394,7 @@ function Nav() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden mt-4 pb-2 flex flex-col gap-1 border-t border-slate-800 pt-3 max-w-7xl mx-auto">
+        <div className="lg:hidden mt-4 pb-2 flex flex-col gap-1 border-t border-gray-200 dark:border-slate-800 pt-3 max-w-7xl mx-auto">
           {links.map((link) => (
             <button
               key={link.path}
@@ -393,8 +404,8 @@ function Nav() {
               }}
               className={`text-left px-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
                 location.pathname === link.path
-                  ? "text-violet-400 bg-violet-500/10"
-                  : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                  ? "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10"
+                  : "text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-900 dark:hover:text-slate-200"
               }`}
             >
               {link.label}
@@ -405,7 +416,7 @@ function Nav() {
             <>
               <button
                 onClick={() => { navigate("/profile"); setIsMobileMenuOpen(false); }}
-                className="text-left px-2 py-2.5 rounded-md text-sm font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 flex items-center gap-2"
+                className="text-left px-2 py-2.5 rounded-md text-sm font-medium text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-900 dark:hover:text-slate-200 flex items-center gap-2"
               >
                 <User size={16} /> My Profile
               </button>
@@ -413,7 +424,7 @@ function Nav() {
               {userData.role === "freelancer" && (
                 <button
                   onClick={() => { navigate(`/freelancer/${userData._id}/profile`); setIsMobileMenuOpen(false); }}
-                  className="text-left px-2 py-2.5 rounded-md text-sm font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 flex items-center gap-2"
+                  className="text-left px-2 py-2.5 rounded-md text-sm font-medium text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-900 dark:hover:text-slate-200 flex items-center gap-2"
                 >
                   <TbEye size={16} /> My Public Profile
                 </button>
@@ -421,7 +432,7 @@ function Nav() {
 
               <button
                 onClick={handleLogout}
-                className="text-left px-2 py-2.5 rounded-md text-sm font-medium text-rose-400 hover:bg-rose-500/10 flex items-center gap-2"
+                className="text-left px-2 py-2.5 rounded-md text-sm font-medium text-rose-500 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 flex items-center gap-2"
               >
                 <LogOut size={16} /> Logout
               </button>

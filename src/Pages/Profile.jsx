@@ -52,35 +52,33 @@ function Profile() {
   };
 
   return (
-    <div className="bg-[#0a0a0f] min-h-screen pb-8 text-gray-200">
+    <div className="bg-gray-50 dark:bg-[#0a0a0f] min-h-screen pb-8 text-gray-800 dark:text-gray-200 transition-colors">
       <Nav />
 
       <div className="max-w-[600px] mx-auto px-4 pt-10">
 
         <div className="mb-6">
-          <p className="text-[20px] font-medium text-gray-50">My Profile</p>
+          <p className="text-[20px] font-medium text-gray-900 dark:text-gray-50">My Profile</p>
           <p className="text-[13px] text-gray-500 mt-1">Apni profile information update karo</p>
         </div>
 
-        {/* Avatar */}
         <div className="flex items-center gap-4 mb-6">
           <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white font-semibold text-2xl">
             {userData?.name?.charAt(0).toUpperCase()}
           </div>
           <div>
-            <p className="text-[15px] font-medium text-gray-100">{userData?.name}</p>
+            <p className="text-[15px] font-medium text-gray-900 dark:text-gray-100">{userData?.name}</p>
             <p className="text-[12px] text-gray-500">{userData?.email}</p>
-            <span className="inline-block mt-1 bg-[#534ab730] border border-[#534AB7] text-[#a5b4fc] text-[11px] font-medium px-2.5 py-0.5 rounded-full capitalize">
+            <span className="inline-block mt-1 bg-[#534ab715] dark:bg-[#534ab730] border border-[#534AB7] text-[#534AB7] dark:text-[#a5b4fc] text-[11px] font-medium px-2.5 py-0.5 rounded-full capitalize">
               {userData?.role}
             </span>
           </div>
         </div>
 
-        {/* 🔴 NEW: sirf freelancer ke liye — apni public profile dekhne ka button */}
         {userData?.role === "freelancer" && (
           <button
             onClick={() => navigate(`/freelancer/${userData._id}/profile`)}
-            className="flex items-center gap-2 bg-[#ffffff08] border border-gray-700 hover:border-[#534AB7] text-gray-300 text-[13px] font-medium px-4 py-2 rounded-md mb-6 transition-colors"
+            className="flex items-center gap-2 bg-white dark:bg-[#ffffff08] border border-gray-300 dark:border-gray-700 hover:border-[#534AB7] text-gray-700 dark:text-gray-300 text-[13px] font-medium px-4 py-2 rounded-md mb-6 transition-colors"
           >
             <TbEye /> Meri Public Profile Dekho (jaisa client ko dikhti hai)
           </button>
@@ -88,49 +86,45 @@ function Profile() {
 
         <form onSubmit={handleSave} className="flex flex-col gap-4">
 
-          {/* Name */}
           <div>
-            <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-400 mb-1.5">
+            <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
               <TbUser /> Poora naam
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 outline-none focus:border-[#534AB7]"
+              className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 outline-none focus:border-[#534AB7]"
             />
           </div>
 
-          {/* Email - readonly */}
           <div>
-            <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-400 mb-1.5">
+            <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
               <TbMail /> Email address
             </label>
             <input
               type="email"
               value={userData?.email}
               disabled
-              className="w-full bg-[#ffffff05] border border-gray-700 rounded-md px-3 py-2.5 text-gray-500 cursor-not-allowed"
+              className="w-full bg-gray-100 dark:bg-[#ffffff05] border border-gray-200 dark:border-gray-700 rounded-md px-3 py-2.5 text-gray-500 cursor-not-allowed"
             />
           </div>
 
-          {/* Bio */}
           <div>
-            <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-400 mb-1.5">
+            <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
               <TbNotes /> Bio
             </label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Apne baare mein, apne experience ke baare mein likho..."
-              className="w-full min-h-[100px] bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 placeholder-gray-500 outline-none focus:border-[#534AB7] resize-none leading-relaxed"
+              className="w-full min-h-[100px] bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] resize-none leading-relaxed"
             />
           </div>
 
-          {/* Skills - sirf freelancer ke liye */}
           {userData?.role === "freelancer" && (
             <div>
-              <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-400 mb-1.5">
+              <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
                 <TbCode /> Skills
               </label>
               <input
@@ -139,13 +133,13 @@ function Profile() {
                 onChange={(e) => setSkillInput(e.target.value)}
                 onKeyDown={addSkill}
                 placeholder="Type skill aur Enter dabao..."
-                className="w-full bg-transparent border border-gray-600 rounded-md px-3 py-2.5 text-gray-100 placeholder-gray-500 outline-none focus:border-[#534AB7] mb-2.5"
+                className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] mb-2.5"
               />
               <div className="flex gap-2 flex-wrap">
                 {skills.map((skill, index) => (
                   <span
                     key={index}
-                    className="flex items-center gap-1.5 bg-[#534ab725] border border-[#534ab760] text-[#a5b4fc] text-xs px-2.5 py-1 rounded-full"
+                    className="flex items-center gap-1.5 bg-[#534ab710] dark:bg-[#534ab725] border border-[#534ab760] text-[#534AB7] dark:text-[#a5b4fc] text-xs px-2.5 py-1 rounded-full"
                   >
                     {skill}
                     <TbX className="cursor-pointer text-[12px]" onClick={() => removeSkill(index)} />
@@ -155,7 +149,6 @@ function Profile() {
             </div>
           )}
 
-          {/* Save Button */}
           <button
             type="submit"
             disabled={loading}
@@ -165,7 +158,7 @@ function Profile() {
           </button>
 
           {success && (
-            <p className="text-green-400 text-sm text-center">✓ Profile update ho gaya!</p>
+            <p className="text-green-600 dark:text-green-400 text-sm text-center">✓ Profile update ho gaya!</p>
           )}
 
         </form>
