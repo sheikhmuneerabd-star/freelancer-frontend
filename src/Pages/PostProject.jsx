@@ -69,9 +69,9 @@ function PostProject() {
       <div className="max-w-[640px] mx-auto px-4 pt-8">
 
         <div className="mb-6">
-          <p className="text-[22px] font-medium text-gray-900 dark:text-gray-50">Naya project post karo</p>
+          <p className="text-[22px] font-medium text-gray-900 dark:text-gray-50">Post a new project</p>
           <p className="text-[13px] text-gray-500 mt-1">
-            Apni requirements clearly likho — freelancers ko aasani hogi
+            Clearly write down your requirements — it will make things easier for freelancers
           </p>
         </div>
 
@@ -85,7 +85,7 @@ function PostProject() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. E-Commerce Website banana hai"
+              placeholder="e.g. I need to build an E-commerce website"
               className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors"
               required
             />
@@ -98,7 +98,7 @@ function PostProject() {
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="React aur Node.js se full e-commerce platform chahiye jisme login, products, cart aur payment ho..."
+              placeholder="I need a full e-commerce platform built with React and Node.js that includes login, products, a shopping cart, and payment functionality"
               className="w-full min-h-[100px] bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors resize-none leading-relaxed"
               required
             />
@@ -156,7 +156,7 @@ function PostProject() {
               value={skillInput}
               onChange={(e) => setSkillInput(e.target.value)}
               onKeyDown={addSkill}
-              placeholder="Type skill aur Enter dabao..."
+              placeholder="Type skill and press enter..."
               className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] transition-colors mb-2.5"
             />
             <div className="flex gap-2 flex-wrap">
@@ -187,7 +187,7 @@ function PostProject() {
               type="submit"
               className="flex-[2] py-3 bg-[#534AB7] hover:bg-[#4840a0] rounded-md text-white text-sm font-medium flex items-center justify-center gap-2 transition-colors"
             >
-              {loading ? "Post ho raha hai..." : <><TbSend /> Project post karo</>}
+              {loading ? "Posting..." : <><TbSend /> Post Project</>}
             </button>
           </div>
 

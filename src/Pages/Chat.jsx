@@ -256,7 +256,7 @@ function Chat() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-[19px] font-semibold text-gray-900 dark:text-gray-50 tracking-tight">Messages</p>
-            <p className="text-[12px] text-gray-500 mt-0.5">Apne connections se baat karo</p>
+            <p className="text-[12px] text-gray-500 mt-0.5">Chat with your connections</p>
           </div>
         </div>
 
@@ -272,7 +272,7 @@ function Chat() {
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search karo..."
+                  placeholder="Search..."
                   className="w-full bg-gray-100 dark:bg-[#16161f] border border-transparent focus:border-[#534AB7]/50 rounded-lg pl-9 pr-3 py-2 text-[13px] text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-600 outline-none transition-colors"
                 />
               </div>
@@ -294,7 +294,7 @@ function Chat() {
                     {search ? "Koi match nahi mila" : "Koi conversation nahi hai"}
                   </p>
                   {!search && (
-                    <p className="text-gray-500 dark:text-gray-600 text-[12px] mt-1">Proposal ya hire hone ke baad yahan chat shuru hogi</p>
+                    <p className="text-gray-500 dark:text-gray-600 text-[12px] mt-1">The chat will start here after a proposal or hiring</p>
                   )}
                 </div>
               ) : (
@@ -379,8 +379,8 @@ function Chat() {
                 <div className="w-16 h-16 rounded-2xl bg-[#534ab710] dark:bg-[#534ab712] flex items-center justify-center mb-4">
                   <TbMessageCircle className="text-[#534AB7] dark:text-[#a5b4fc] text-3xl" />
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 text-[15px] font-medium">Apni messages yahan dekho</p>
-                <p className="text-gray-500 dark:text-gray-600 text-[13px] mt-1">Baaen taraf se conversation select karo</p>
+                <p className="text-gray-700 dark:text-gray-300 text-[15px] font-medium">View your messages here</p>
+                <p className="text-gray-500 dark:text-gray-600 text-[13px] mt-1">Select a conversation from the left side</p>
               </div>
             ) : (
               <>
@@ -398,7 +398,7 @@ function Chat() {
                     <p className="text-[13.5px] font-medium text-gray-900 dark:text-gray-100 truncate">{activeChat.name}</p>
                     <p className="text-[11.5px] truncate">
                       {isOtherTyping ? (
-                        <span className="text-[#534AB7] dark:text-[#a5b4fc] font-medium">type kar raha hai...</span>
+                        <span className="text-[#534AB7] dark:text-[#a5b4fc] font-medium">Typing...</span>
                       ) : (
                         <span className="text-gray-500">{activeChat.projectTitle}</span>
                       )}
@@ -406,7 +406,7 @@ function Chat() {
                   </div>
                   {activeChat.status === "proposal" && (
                     <span className="text-[10.5px] font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 px-2.5 py-1 rounded-full flex-shrink-0 whitespace-nowrap">
-                      Hire nahi hua abhi
+                      Not hired yet
                     </span>
                   )}
                 </div>
@@ -420,8 +420,8 @@ function Chat() {
                     </div>
                   ) : messages.length === 0 ? (
                     <div className="flex-1 flex flex-col items-center justify-center text-center">
-                      <p className="text-gray-500 text-sm">Koi message nahi hai</p>
-                      <p className="text-gray-400 dark:text-gray-700 text-[12px] mt-1">Sabse pehla message aap bhejo</p>
+                      <p className="text-gray-500 text-sm">No messages yet</p>
+                      <p className="text-gray-400 dark:text-gray-700 text-[12px] mt-1">You send the first message</p>
                     </div>
                   ) : (
                     groupedMessages.map((item) => {
@@ -490,7 +490,7 @@ function Chat() {
                     ref={inputRef}
                     value={input}
                     onChange={handleInputChange}
-                    placeholder="Message likho..."
+                    placeholder="Write a message..."
                     className="flex-1 bg-gray-100 dark:bg-[#16161f] border border-transparent focus:border-[#534AB7]/50 rounded-full px-4 py-2.5 text-[13.5px] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-600 outline-none transition-colors"
                   />
                   <button

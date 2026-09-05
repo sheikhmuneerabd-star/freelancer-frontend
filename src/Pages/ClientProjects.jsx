@@ -114,7 +114,7 @@ function ClientProjects() {
         {loading ? (
           <p className="text-gray-500 text-sm">Loading...</p>
         ) : filteredProjects.length === 0 ? (
-          <p className="text-gray-500 text-sm">Koi project nahi mila</p>
+          <p className="text-gray-500 text-sm">No project was found</p>
         ) : (
           <div className="flex flex-col gap-3">
             {filteredProjects.map((project) => (
@@ -138,8 +138,8 @@ function ClientProjects() {
                         </span>
                       </>
                     ) : (
-                      "Abhi koi hire nahi"
-                    )} • Deadline: {project.deadline} din
+                      "No one has been hired yet"
+                    )} • Deadline: {project.deadline} days
                   </p>
                 </div>
 
@@ -170,7 +170,7 @@ function ClientProjects() {
                           onClick={() => setReviewProject(project)}
                           className="bg-amber-50 dark:bg-amber-600/20 border border-amber-500 dark:border-amber-600 text-amber-600 dark:text-amber-400 text-[12px] font-medium px-3.5 py-1.5 rounded-md hover:bg-amber-100 dark:hover:bg-amber-600/30"
                         >
-                          Review Do
+                          Give a review
                         </button>
                       )}
                     </>

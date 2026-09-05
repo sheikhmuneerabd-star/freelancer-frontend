@@ -59,7 +59,7 @@ function Profile() {
 
         <div className="mb-6">
           <p className="text-[20px] font-medium text-gray-900 dark:text-gray-50">My Profile</p>
-          <p className="text-[13px] text-gray-500 mt-1">Apni profile information update karo</p>
+          <p className="text-[13px] text-gray-500 mt-1">Update your profile information</p>
         </div>
 
         <div className="flex items-center gap-4 mb-6">
@@ -80,7 +80,7 @@ function Profile() {
             onClick={() => navigate(`/freelancer/${userData._id}/profile`)}
             className="flex items-center gap-2 bg-white dark:bg-[#ffffff08] border border-gray-300 dark:border-gray-700 hover:border-[#534AB7] text-gray-700 dark:text-gray-300 text-[13px] font-medium px-4 py-2 rounded-md mb-6 transition-colors"
           >
-            <TbEye /> Meri Public Profile Dekho (jaisa client ko dikhti hai)
+            <TbEye /> View my public profile (as it appears to the client)
           </button>
         )}
 
@@ -88,7 +88,7 @@ function Profile() {
 
           <div>
             <label className="flex items-center gap-1.5 text-[13px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">
-              <TbUser /> Poora naam
+              <TbUser /> Full naam
             </label>
             <input
               type="text"
@@ -117,7 +117,7 @@ function Profile() {
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              placeholder="Apne baare mein, apne experience ke baare mein likho..."
+              placeholder="Write about yourself and your experience..."
               className="w-full min-h-[100px] bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] resize-none leading-relaxed"
             />
           </div>
@@ -132,7 +132,7 @@ function Profile() {
                 value={skillInput}
                 onChange={(e) => setSkillInput(e.target.value)}
                 onKeyDown={addSkill}
-                placeholder="Type skill aur Enter dabao..."
+                placeholder="Type skill and press Enter..."
                 className="w-full bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] mb-2.5"
               />
               <div className="flex gap-2 flex-wrap">
@@ -154,11 +154,11 @@ function Profile() {
             disabled={loading}
             className="bg-[#534AB7] hover:bg-[#4840a0] text-white py-2.5 rounded-md text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-60 mt-2"
           >
-            <TbDeviceFloppy /> {loading ? "Save ho raha hai..." : "Profile Save Karo"}
+            <TbDeviceFloppy /> {loading ? "Saving..." : "Save Profile"}
           </button>
 
           {success && (
-            <p className="text-green-600 dark:text-green-400 text-sm text-center">✓ Profile update ho gaya!</p>
+            <p className="text-green-600 dark:text-green-400 text-sm text-center">✓ Profile updated successfully!</p>
           )}
 
         </form>

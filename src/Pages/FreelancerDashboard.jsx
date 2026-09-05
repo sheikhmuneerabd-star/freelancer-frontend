@@ -103,7 +103,7 @@ function FreelancerDashboard() {
             Freelancer
           </span>
         </div>
-        <p className="text-gray-500 text-sm mb-6">Aapke kaam ka overview</p>
+        <p className="text-gray-500 text-sm mb-6">An overview of your work</p>
 
         {loading ? (
           <p className="text-gray-500 text-sm">Loading...</p>
@@ -131,7 +131,7 @@ function FreelancerDashboard() {
             <p className="text-[16px] font-medium text-gray-900 dark:text-gray-50 mb-3">Active Projects</p>
             <div className="flex flex-col gap-2.5 mb-8">
               {activeProjects.length === 0 ? (
-                <p className="text-gray-500 text-sm">Abhi koi active project nahi hai</p>
+                <p className="text-gray-500 text-sm">There are no active projects right now</p>
               ) : (
                 activeProjects.map((project) => (
                   <div key={project._id} className="bg-white dark:bg-[#ffffff08] border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex justify-between items-center shadow-sm dark:shadow-none">
@@ -150,7 +150,7 @@ function FreelancerDashboard() {
             <p className="text-[16px] font-medium text-gray-900 dark:text-gray-50 mb-3">My Proposals</p>
             <div className="flex flex-col gap-2.5">
               {myProposals.length === 0 ? (
-                <p className="text-gray-500 text-sm">Aapne abhi koi proposal nahi bheja</p>
+                <p className="text-gray-500 text-sm">You haven't sent any proposals yet</p>
               ) : (
                 myProposals.map((proposal) => (
                   <div key={proposal._id} className="bg-white dark:bg-[#ffffff08] border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex justify-between items-center shadow-sm dark:shadow-none">
@@ -175,7 +175,7 @@ function FreelancerDashboard() {
             <p className="text-[16px] font-medium text-gray-900 dark:text-gray-50 mb-3 mt-8">My Tasks</p>
             <div className="flex flex-col gap-2.5">
               {tasks.length === 0 ? (
-                <p className="text-gray-500 text-sm">Abhi koi task assign nahi hua</p>
+                <p className="text-gray-500 text-sm">No task has been assigned yet</p>
               ) : (
                 tasks.map((task) => (
                   <div key={task._id} className="bg-white dark:bg-[#ffffff08] border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex justify-between items-center shadow-sm dark:shadow-none">

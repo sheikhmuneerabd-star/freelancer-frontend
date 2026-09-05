@@ -101,7 +101,7 @@ function ClientDashboard() {
               Client
             </span>
           </div>
-          <p className="text-gray-500 text-sm mt-1">Aapke projects ka overview</p>
+          <p className="text-gray-500 text-sm mt-1">Overview of your projects</p>
         </div>
 
         {loading ? (
@@ -123,18 +123,18 @@ function ClientDashboard() {
 
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Aapke Active Projects</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Your Active Projects</h2>
                 <button
                   className="bg-indigo-600/90 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
                   onClick={() => navigate("/client/post-project")}
                 >
-                  <Plus size={16} /> Naya Project Post Karo
+                  <Plus size={16} /> Post a new project
                 </button>
               </div>
 
               <div className="space-y-3">
                 {activeProjects.length === 0 ? (
-                  <p className="text-gray-500 text-sm">Koi active project nahi hai abhi</p>
+                  <p className="text-gray-500 text-sm">There are no active projects right now</p>
                 ) : (
                   activeProjects.map((project) => (
                     <div key={project._id} className="bg-white dark:bg-[#131520] border border-gray-200 dark:border-slate-800/60 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 hover:bg-gray-50 dark:hover:bg-[#161926] transition-colors shadow-sm dark:shadow-none">

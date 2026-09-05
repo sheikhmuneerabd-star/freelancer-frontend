@@ -104,14 +104,14 @@ function ProjectList() {
 
         <div className="mb-5">
           <p className="text-[18px] font-medium text-gray-900 dark:text-gray-50">Available Projects</p>
-          <p className="text-[12px] text-gray-500 mt-1">{projects.length} projects mil gaye</p>
+          <p className="text-[12px] text-gray-500 mt-1">{projects.length} Got the projects</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Title ya skill search karo..."
+            placeholder="Search by title or skill..."
             className="flex-1 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7]"
           />
           <input
@@ -142,7 +142,7 @@ function ProjectList() {
         {loading ? (
           <p className="text-gray-500 text-sm">Loading...</p>
         ) : projects.length === 0 ? (
-          <p className="text-gray-500 text-sm">Abhi koi project available nahi hai</p>
+          <p className="text-gray-500 text-sm">No projects available at the moment</p>
         ) : (
           <div className="flex flex-col gap-3.5">
             {projects.map((project) => (
@@ -193,7 +193,7 @@ function ProjectList() {
                     onClick={() => setSelectedProject(project)}
                     className="bg-[#534ab710] dark:bg-[#534ab720] border border-[#534AB7] text-[#534AB7] dark:text-[#a5b4fc] text-[12px] font-medium px-3.5 py-1.5 rounded-md hover:bg-[#534ab725] dark:hover:bg-[#534ab740]"
                   >
-                    Proposal Bhejo
+                    Send proposal
                   </button>
                 </div>
               </div>
@@ -207,7 +207,7 @@ function ProjectList() {
           <div className="bg-white dark:bg-[#0f0e1a] border border-gray-200 dark:border-gray-700 rounded-xl p-6 w-full max-w-[480px]">
             <div className="flex justify-between items-center mb-4">
               <p className="text-[16px] font-medium text-gray-900 dark:text-gray-50">
-                Proposal Bhejo — {selectedProject.title}
+                Send Proposal — {selectedProject.title}
               </p>
               <TbX 
                 className="text-gray-500 dark:text-gray-400 cursor-pointer text-lg" 
@@ -221,7 +221,7 @@ function ProjectList() {
                 <textarea
                   value={coverLetter}
                   onChange={(e) => setCoverLetter(e.target.value)}
-                  placeholder="Apna experience aur approach batao..."
+                  placeholder="Describe your experience and approach..."
                   className="w-full min-h-[90px] bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] resize-none text-sm"
                   required
                 />
@@ -257,7 +257,7 @@ function ProjectList() {
                 disabled={submitting}
                 className="bg-[#534AB7] hover:bg-[#4840a0] text-white py-2.5 rounded-md text-sm font-medium disabled:opacity-60"
               >
-                {submitting ? "Bhej rahe hain..." : "Proposal Submit Karo"}
+                {submitting ? "Sending..." : "Submit Proposal"}
               </button>
             </form>
           </div>

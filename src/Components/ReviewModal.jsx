@@ -44,14 +44,14 @@ function ReviewModal({ project, onClose, onSuccess }) {
       <div className="bg-white dark:bg-[#0f0e1a] border border-gray-200 dark:border-gray-700 rounded-xl p-6 w-full max-w-[440px]">
         <div className="flex justify-between items-center mb-4">
           <p className="text-[16px] font-medium text-gray-900 dark:text-gray-50">
-            Review Do — {project.title}
+            Give a Review — {project.title}
           </p>
           <TbX className="text-gray-500 dark:text-gray-400 cursor-pointer text-lg" onClick={onClose} />
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="text-[13px] text-gray-600 dark:text-gray-400 mb-2 block">Freelancer ko rate karo</label>
+            <label className="text-[13px] text-gray-600 dark:text-gray-400 mb-2 block">Rate the freelancer</label>
             <div className="flex gap-1.5">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -73,7 +73,7 @@ function ReviewModal({ project, onClose, onSuccess }) {
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Kaam kaisa raha, kya achha laga..."
+              placeholder="How was the work, what did you like..."
               className="w-full min-h-[90px] bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-[#534AB7] resize-none text-sm"
               required
               maxLength={500}
@@ -87,7 +87,7 @@ function ReviewModal({ project, onClose, onSuccess }) {
             disabled={submitting}
             className="bg-[#534AB7] hover:bg-[#4840a0] text-white py-2.5 rounded-md text-sm font-medium disabled:opacity-60"
           >
-            {submitting ? "Submit ho raha hai..." : "Review Submit Karo"}
+            {submitting ? "Submitting..." : "Submit Review"}
           </button>
         </form>
       </div>

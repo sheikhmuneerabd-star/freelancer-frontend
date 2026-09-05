@@ -58,7 +58,7 @@ function Login() {
     <div>
         <div className="mt-2 px-4">
             <h2 className="text-center text-2xl sm:text-[30px] text-gray-900 dark:text-white font-medium">Login</h2>
-            <p className="text-gray-600 dark:text-gray-300 text-center text-[13px] sm:text-[15px] font-medium">Apne account mein login karein</p>
+            <p className="text-gray-600 dark:text-gray-300 text-center text-[13px] sm:text-[15px] font-medium">Log in to your account</p>
         </div>
 
         <form className="space-y-3 px-4 sm:px-6 mt-4 mb-4" onSubmit={handleLogin}>
@@ -94,25 +94,25 @@ function Login() {
                 </div>
             </div>
             {error && <span className="text-red-500 text-sm font-medium block">*{error}</span>}
-            <p className="text-[#534AB7] text-[13px] sm:text-[15px] text-right cursor-pointer font-medium">Password bhool gaye?</p>
+            <p className="text-[#534AB7] text-[13px] sm:text-[15px] text-right cursor-pointer font-medium">Forgot password?</p>
             <button className="border-[1px] mt-3 border-gray-300 dark:border-gray-500 text-gray-800 dark:text-white w-full h-[39px] font-medium rounded-md hover:bg-gray-100 dark:hover:bg-[#00000032] text-base sm:text-lg">
-                {loading ? "Loading..." : "Login karein"}
+                {loading ? "Loading..." : "Login"}
             </button>
             <div className="flex items-center gap-2">
                 <div className="w-full h-[1px] bg-gray-300 dark:bg-gray-400"></div>
-                <div className="text-gray-500 dark:text-gray-300 text-[13px] sm:text-[15px]">ya</div>
+                <div className="text-gray-500 dark:text-gray-300 text-[13px] sm:text-[15px]">or</div>
                 <div className="w-full h-[1px] bg-gray-300 dark:bg-gray-400"></div>
             </div>
             <button className="border-[1px] mt-3 border-gray-300 dark:border-gray-500 text-gray-800 dark:text-white w-full h-[39px] font-medium rounded-md hover:bg-gray-100 dark:hover:bg-[#00000032] text-sm sm:text-lg flex items-center justify-center gap-1.5 sm:gap-2 px-2">
                 <SlSocialGoogle className="text-orange-600 flex-shrink-0" />
-                <span className="truncate">Google se login karein</span>
+                <span className="truncate">Login with Google</span>
                 <MdArrowOutward className="flex-shrink-0" />
             </button>
             <div className="flex items-center justify-center flex-wrap text-center">
                 <span className="text-gray-500 dark:text-gray-300 font-medium mt-2 text-[13px] sm:text-[15px]">
-                    Account nahi?{" "}
+                    Don't have an account?{" "}
                     <span className="text-[#534AB7] cursor-pointer font-medium" onClick={() => navigate("/auth/signUp")}>
-                        Sign up karein
+                        Sign up
                     </span>
                 </span>
             </div>

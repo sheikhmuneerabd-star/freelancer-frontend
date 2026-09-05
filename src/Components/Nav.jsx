@@ -108,7 +108,7 @@ function Nav() {
         return prev.filter((n) => n._id !== notifId);
       });
     } catch (error) {
-      toast.error("Delete nahi ho saka");
+      toast.error("Failed to delete");
     }
   };
 
@@ -118,7 +118,7 @@ function Nav() {
       setNotifications([]);
       setUnreadCount(0);
     } catch (error) {
-      toast.error("Clear nahi ho saka");
+      toast.error("Failed to clear");
     }
   };
 
@@ -250,7 +250,7 @@ function Nav() {
                             onClick={handleMarkAllRead}
                             className="text-[11px] text-[#6c5fc7] dark:text-[#a5b4fc] hover:text-[#534AB7] dark:hover:text-white font-medium transition-colors"
                           >
-                            Sab read karo
+                            Mark all as read
                           </button>
                         )}
                         <button
@@ -267,7 +267,7 @@ function Nav() {
                   {notifications.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 px-4">
                       <TbInbox className="text-gray-300 dark:text-slate-700 text-4xl mb-2" />
-                      <p className="text-gray-500 text-sm">Koi notification nahi hai</p>
+                      <p className="text-gray-500 text-sm">No notifications</p>
                     </div>
                   ) : (
                     <div className="notif-scroll max-h-[400px] overflow-y-auto">

@@ -15,10 +15,10 @@ function Home() {
 
       <div className='w-full min-h-[80vh] flex gap-5 flex-col items-center justify-center px-4 text-center'>
         <h2 className="font-medium text-2xl sm:text-[35px] text-gray-900 dark:text-gray-50 leading-snug">
-          Apna kaam karo, apni marzi se
+          Do your work, on your own terms
         </h2>
         <p className="font-medium text-gray-500 dark:text-gray-400 text-sm sm:text-[18px] max-w-[500px]">
-          Client projects post karo ya freelancer ke tor pe kaam dhundo
+          Post client projects or work as a freelancer
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center mt-2">
